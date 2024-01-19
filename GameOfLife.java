@@ -27,7 +27,6 @@ public class GameOfLife {
 	// the count and cellValue functions.
 	private static void test2(String fileName) {
 		int[][] board = read(fileName);
-		djdjdjdd
 		//// Write here code that tests that the count and cellValue functions
 		//// are working properly, and returning the correct values.
 	}
@@ -65,7 +64,14 @@ public class GameOfLife {
 		int cols = Integer.parseInt(in.readLine());
 		int[][] board = new int[rows + 2][cols + 2];
 		//// Replace the following statement with your code.
-		return null;
+		for(int i = 1; i < (rows-1); i++) {
+			for(int j = 1; j < (cols-1); j++) {    
+				if(!in.isEmpty()) { 
+					board[i][j] = 1;       // if a live (black/not empty) puts 1. else it's already 0. 
+				}
+			}
+		}
+		return board;
 	}
 	
 	// Creates a new board from the given board, using the rules of the game.
