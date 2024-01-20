@@ -11,10 +11,10 @@ public class GameOfLife {
 		String fileName = args[0];
 		//// Uncomment the test that you want to execute, and re-compile.
 		//// (Run one test at a time).
-		//// test1(fileName);
-		//// test2(fileName);
-		//// test3(fileName, 3);
-		//// play(fileName);
+		//test1(fileName);
+		//test2(fileName);
+		/// test3(fileName, 3);
+		play(fileName);
 	}
 	
 	// Reads the data file and prints the initial board.
@@ -29,6 +29,14 @@ public class GameOfLife {
 		int[][] board = read(fileName);
 		//// Write here code that tests that the count and cellValue functions
 		//// are working properly, and returning the correct values.
+		for (int i = 1; i < (board.length - 1); i++) {
+			for( int j = 1; j < (board[0].length - 1); j++) {
+				int cnt = count(board, i, j);
+				System.out.println("Current Cell (i = " + i + " j = " + j + ") Value is = " + board[i][j] + "Live Neighbors = " + cnt );
+				//board[i][j] = cellValue(board, i, j);
+				//System.out.println("New Cell Value is = " + board[i][j]);
+			}
+		}
 	}
 		
 	// Reads the data file, plays the game for Ngen generations, 
@@ -64,12 +72,20 @@ public class GameOfLife {
 		int cols = Integer.parseInt(in.readLine());
 		int[][] board = new int[rows + 2][cols + 2];
 		//// Replace the following statement with your code.
-		for(int i = 1; i < (rows-1); i++) {
-			for(int j = 1; j < (cols-1); j++) {    
-				if(!in.isEmpty()) { 
-					board[i][j] = 1;       // if a live (black/not empty) puts 1. else it's already 0. 
+		int i = 1; // i represents the rows
+		int j = 1; // j represents the columns
+		while( !in.isEmpty() ) { 
+			String line = in.readLine(); 
+			int leng = line.length();
+			if( leng != 0){
+				for(j=1; j<=leng; j++){
+					char chr = line.charAt(j-1);
+					if(chr == 'x'){
+						board[i][j] = 1;	
+					}	
 				}
 			}
+			i++;		
 		}
 		return board;
 	}
@@ -79,7 +95,13 @@ public class GameOfLife {
 	// cell in the new board. Returns the new board.
 	public static int[][] evolve(int[][] board) {
 		//// Replace the following statement with your code.
-		return null;
+		int[][] newBoard = new int[board.length][board[0].length]; 
+		for (int i = 1; i < (board.length - 1); i++) {
+			for( int j = 1; j < (board[0].length - 1); j++) {
+				newBoard[i][j] = cellValue(board, i, j);
+			}
+		}
+		return newBoard;
 	}
 
 	// Returns the value that cell (i,j) should have in the next generation.
@@ -92,8 +114,17 @@ public class GameOfLife {
 	// Assumes that j is at least 1 and at most the number of columns in the board - 1. 
 	// Uses the count(board,i,j) function to count the number of alive neighbors.
 	public static int cellValue(int[][] board, int i, int j) {
-		//// Replace the following statement with your code.
-		return 0;
+		int cnt = count(board, i, j); 
+		int celVal = board[i][j];
+		if( board[i][j] == 1 ) {
+			if ((cnt < 2) || (cnt > 3) ){
+				celVal = 0;
+			}
+		}
+		else if (cnt == 3){
+			celVal = 1;
+		}		
+		return celVal;
 	}
 	
 	// Counts and returns the number of living neighbors of the given cell
@@ -101,13 +132,29 @@ public class GameOfLife {
 	// Assumes that i is at least 1 and at most the number of rows in the board - 1. 
 	// Assumes that j is at least 1 and at most the number of columns in the board - 1. 
 	public static int count(int[][] board, int i, int j) {
-		//// Replace the following statement with your code.
-		return 0;
+		int cnt = 0; 
+		for( int ii = i - 1; ii <= i + 1; ii++){
+			for(int jj = j - 1; jj <= j + 1; jj++) {
+				if(board[ii][jj] == 1){
+					cnt++;
+				}
+			}
+		}
+		if(board[i][j] == 1){
+			cnt--;
+		}
+		return cnt;
 	}
 	
 	// Prints the board. Alive and dead cells are printed as 1 and 0, respectively.
     public static void print(int[][] arr) {
 		//// Write your code here.
+		for (int i = 1; i < (arr.length - 1); i++) {
+			for( int j = 1; j < (arr[0].length - 1); j++) {
+				System.out.printf("%3s", arr[i][j]); 
+			}
+			System.out.println();
+		}
 	}
 		
     // Displays the board. Living and dead cells are represented by black and white squares, respectively.
